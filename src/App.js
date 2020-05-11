@@ -1,24 +1,43 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { useState } from 'react';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
 
 function App() {
+  const [tabs, setTabs] = useState(['Type your tab contents here...']);
+  const [currentTab, setCurrentTab] = useState(0);
+
+  const createTab = () => {
+    setTabs([...tabs, 'Type your tab contents here...' ]);
+    setCurrentTab(tabs.length);
+  }
+
+  const onChange = (e) => {
+    const allTabs = [...tabs];
+    allTabs[currentTab] = e.target.value;
+    setTabs(allTabs);
+  }
+
+  const changeTab = (e, idx) => {
+    setCurrentTab(idx);
+  }
+  
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <div>
+        <button onClick={createTab}>Add Tab</button>
+        {
+          tabs.map((tab, i) =>
+            <button 
+              style = { currentTab === i ? {backgroundColor : "black", color : "white"} : null}
+              value={i} 
+              onClick={(e) => changeTab(e, i)}
+            >
+              Tab {i+1}
+            </button>                                                          
+          )
+        }
+      </div>
+      <textarea placeholder="Type here" rows="4" cols="50" value={tabs[currentTab]} onChange={onChange}></textarea>
     </div>
   );
 }
